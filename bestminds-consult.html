@@ -1,236 +1,650 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-<meta charset="UTF-8">
-<title>BestMinds Consult — Homepage Rework</title>
-<style>
-  body {
-    font-family: Arial, Helvetica, sans-serif;
-    max-width: 720px;
-    margin: 40px auto;
-    padding: 0 32px 60px 32px;
-    color: #202124;
-    line-height: 1.55;
-    background: #ffffff;
-  }
-
-  .doc-title {
-    font-size: 20px;
-    font-weight: 700;
-    margin-bottom: 4px;
-    color: #1a1a1a;
-  }
-
-  .doc-sub {
-    font-size: 13px;
-    color: #5f6368;
-    margin-bottom: 32px;
-    border-bottom: 1px solid #e0e0e0;
-    padding-bottom: 14px;
-  }
-
-  .nav {
-    border: 1px solid #dadce0;
-    border-radius: 6px;
-    padding: 10px 18px;
-    font-size: 12px;
-    color: #5f6368;
-    display: flex;
-    justify-content: space-between;
-    margin-bottom: 24px;
-    background: #fafafa;
-  }
-
-  .nav-items {
-    display: flex;
-    gap: 16px;
-  }
-
-  .section {
-    border: 1px solid #dadce0;
-    border-radius: 8px;
-    padding: 22px 24px;
-    margin: 22px 0;
-    background: #fafafa;
-  }
-
-  .section-num {
-    font-size: 10px;
-    letter-spacing: 1.5px;
-    color: #1a73e8;
-    font-weight: 700;
-    text-transform: uppercase;
-    margin-bottom: 12px;
-  }
-
-  .h1 {
-    font-size: 28px;
-    font-weight: 700;
-    line-height: 1.2;
-    color: #1a1a1a;
-    margin: 0 0 8px 0;
-  }
-
-  .h2 {
-    font-size: 18px;
-    font-weight: 700;
-    line-height: 1.25;
-    color: #1a1a1a;
-    margin: 0 0 4px 0;
-  }
-
-  .subhead {
-    font-size: 15px;
-    color: #5f6368;
-    line-height: 1.5;
-    margin: 0 0 16px 0;
-  }
-
-  .cta {
-    display: inline-block;
-    background: #1a73e8;
-    color: #ffffff;
-    padding: 9px 18px;
-    border-radius: 4px;
-    font-size: 13px;
-    font-weight: 600;
-    margin-top: 4px;
-  }
-
-  .placeholder {
-    color: #80868b;
-    font-style: italic;
-    font-size: 13px;
-  }
-
-  .footer {
-    border: 1px solid #dadce0;
-    border-radius: 6px;
-    padding: 10px 18px;
-    font-size: 11px;
-    color: #80868b;
-    display: flex;
-    justify-content: space-between;
-    margin-top: 24px;
-    background: #fafafa;
-  }
-
-  .built-tag {
-    font-size: 10px;
-    letter-spacing: 1px;
-    background: #e8f0fe;
-    color: #1a73e8;
-    padding: 2px 6px;
-    border-radius: 3px;
-    font-weight: 700;
-    margin-left: 6px;
-  }
-
-  .scoped-tag {
-    font-size: 10px;
-    letter-spacing: 1px;
-    background: #f1f3f4;
-    color: #5f6368;
-    padding: 2px 6px;
-    border-radius: 3px;
-    font-weight: 700;
-    margin-left: 6px;
-  }
-</style>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description" content="Bestminds Consult helps young professionals turn uncertainty into direction with practical coaching, structure, and mentorship.">
+  <title>Bestminds Consult</title>
+  <script src="https://cdn.jsdelivr.net/npm/@tailwindcss/browser@4"></script>
+  <style>
+    html { scroll-behavior: smooth; }
+    body { font-family: Inter, ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif; }
+    .hero-bg {
+      background-image:
+        linear-gradient(90deg, rgba(8, 12, 25, 0.94) 0%, rgba(8, 12, 25, 0.82) 50%, rgba(8, 12, 25, 0.55) 100%),
+        radial-gradient(ellipse at 80% 20%, rgba(216, 166, 74, 0.15) 0%, transparent 60%);
+      background-position: center;
+      background-size: cover;
+    }
+    @media (max-width: 768px) {
+      .hero-bg {
+        background-image:
+          linear-gradient(180deg, rgba(8, 12, 25, 0.96) 0%, rgba(8, 12, 25, 0.88) 60%, rgba(8, 12, 25, 0.75) 100%),
+          radial-gradient(ellipse at top right, rgba(216, 166, 74, 0.2) 0%, transparent 70%);
+        background-position: center top;
+      }
+    }
+    .reveal { opacity: 0; transform: translateY(22px); transition: opacity 800ms ease, transform 800ms ease; }
+    .reveal.show { opacity: 1; transform: translateY(0); }
+    .attention-flash { animation: attentionFlash 2.8s ease-in-out infinite; }
+    .trust-journey-overlay { opacity: 0; visibility: hidden; pointer-events: none; transition: opacity 700ms ease, visibility 700ms ease; }
+    .trust-journey-overlay.is-visible { opacity: 1; visibility: visible; pointer-events: auto; }
+    .float-slow { animation: floatSlow 6s ease-in-out infinite; }
+    .shine { position: relative; overflow: hidden; }
+    .shine::after {
+      content: "";
+      position: absolute;
+      inset: 0;
+      transform: translateX(-120%);
+      background: linear-gradient(110deg, transparent 20%, rgba(255,255,255,0.2) 48%, transparent 75%);
+      animation: shine 4.8s ease-in-out infinite;
+    }
+    /* Persistent fixed watermark */
+    .persistent-watermark {
+      position: fixed;
+      inset: 0;
+      z-index: 40;
+      pointer-events: none;
+      user-select: none;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      overflow: hidden;
+    }
+    .watermark-diagonal {
+      transform: rotate(-24deg);
+      white-space: nowrap;
+      font-weight: 900;
+      letter-spacing: 0.28em;
+      text-transform: uppercase;
+      font-size: clamp(1.4rem, 4.5vw, 4rem);
+      color: rgba(18, 20, 34, 0.055);
+      border: 3px dashed rgba(18, 20, 34, 0.07);
+      padding: 1rem 3rem;
+      border-radius: 9999px;
+      text-align: center;
+      line-height: 1.2;
+    }
+    .watermark-ticker {
+      position: fixed;
+      bottom: 0.75rem;
+      left: 50%;
+      transform: translateX(-50%);
+      z-index: 45;
+      pointer-events: none;
+      user-select: none;
+      white-space: nowrap;
+      background: rgba(8, 12, 25, 0.85);
+      border: 1px solid rgba(216, 166, 74, 0.35);
+      color: #f0c46b;
+      padding: 0.35rem 1rem;
+      border-radius: 9999px;
+      font-size: 0.7rem;
+      font-weight: 800;
+      letter-spacing: 0.18em;
+      text-transform: uppercase;
+      backdrop-blur: 8px;
+      box-shadow: 0 4px 16px rgba(0,0,0,0.25);
+    }
+    @media (max-width: 640px) {
+      .watermark-diagonal {
+        font-size: 1.15rem;
+        letter-spacing: 0.16em;
+        padding: 0.75rem 1.25rem;
+        border-width: 2px;
+      }
+      .watermark-ticker {
+        font-size: 0.6rem;
+        letter-spacing: 0.12em;
+        padding: 0.3rem 0.75rem;
+        bottom: 0.5rem;
+        width: 90%;
+        text-align: center;
+      }
+    }
+    @keyframes floatSlow { 0%, 100% { transform: translateY(0); } 50% { transform: translateY(-10px); } }
+    @keyframes shine { 0%, 55% { transform: translateX(-120%); } 100% { transform: translateX(120%); } }
+    @keyframes attentionFlash {
+      0%, 100% { box-shadow: 0 0 0 rgba(240, 196, 107, 0); }
+      50% { box-shadow: 0 0 0 7px rgba(240, 196, 107, 0.16), 0 14px 38px rgba(154, 106, 20, 0.12); }
+    }
+    @media (prefers-reduced-motion: reduce) {
+      html { scroll-behavior: auto; }
+      .attention-flash, .float-slow, .shine::after { animation: none; }
+    }
+  </style>
 </head>
-<body>
-
-<div class="doc-title">BestMinds Consult — Homepage Rework Flow</div>
-<div class="doc-sub">Segun Falade || Copy Strategist for Coaches</div>
-
-<!-- NAV -->
-<div class="nav">
-  <div><strong>BestMinds Consult</strong></div>
-  <div class="nav-items">
-    <span>About</span>
-    <span>Coaching</span>
-    <span>Temperament</span>
-    <span>Events</span>
-    <span>Contact</span>
+<body class="relative bg-[#fffaf2] text-[#121422] antialiased">
+  <!-- Persistent Watermark across entire page -->
+  <div class="persistent-watermark" aria-hidden="true">
+    <div class="watermark-diagonal">
+      STRATEGIC CONCEPT &bull; NOT FOR PUBLICATION
+    </div>
   </div>
-</div>
+  <div class="watermark-ticker" aria-hidden="true">
+    STRATEGIC CONCEPT &bull; NOT FOR PUBLICATION
+  </div>
 
-<!-- SECTION 1: HERO — FULLY WRITTEN -->
-<div class="section">
-  <div class="section-num">Section 1 — Hero <span class="built-tag">FULLY WRITTEN</span></div>
+  <header class="fixed inset-x-0 top-0 z-50 border-b border-white/10 bg-[#080c19]/82 backdrop-blur-xl">
+    <nav class="mx-auto flex max-w-7xl items-center justify-between px-4 py-3 sm:px-6 lg:px-8" aria-label="Main navigation">
+      <a href="#top" class="flex min-w-0 items-center gap-3" aria-label="Bestminds Consult home">
+        <img id="brandLogo" class="h-12 w-12 shrink-0 rounded-full border-2 border-[#d8a64a] bg-white object-cover object-top" src="https://segunfalade.github.io/assets/bestminds.png" alt="Bestminds Consult founder portrait" onerror="this.style.display='none'; this.nextElementSibling.style.display='grid';">
+        <span id="brandLogoFallback" style="display:none;" class="h-12 w-12 shrink-0 place-items-center rounded-full border-2 border-[#d8a64a] bg-[#f0c46b] text-lg font-black text-[#11121e]">BC</span>
+        <span class="truncate text-base font-semibold tracking-wide text-white sm:text-lg">Bestminds Consult</span>
+      </a>
+      <button id="menuButton" class="rounded-full border border-white/20 px-4 py-2 text-sm font-semibold text-white md:hidden" aria-expanded="false" aria-controls="mobileMenu">Menu</button>
+      <div class="hidden items-center gap-8 text-sm font-medium text-white/78 md:flex">
+        <a class="transition hover:text-[#f0c46b]" href="#challenge">The Reality</a>
+        <a class="transition hover:text-[#f0c46b]" href="#trust">Trust Protocol</a>
+        <a class="transition hover:text-[#f0c46b]" href="#next-step">Take the Step</a>
+      </div>
+    </nav>
+    <div id="mobileMenu" class="hidden border-t border-white/10 bg-[#080c19] px-4 pb-5 pt-2 md:hidden">
+      <div class="mx-auto flex max-w-7xl flex-col gap-3 text-sm font-semibold text-white/86">
+        <a class="py-2" href="#challenge">The Reality</a>
+        <a class="py-2" href="#trust">Trust Protocol</a>
+        <a class="py-2" href="#next-step">Take the Step</a>
+      </div>
+    </div>
+  </header>
 
-  <p class="h1">You Look Fine on the Outside. Inside, You're Tired of Pretending You Have it Together</p>
+  <main id="top">
+    <!-- HERO -->
+    <section class="hero-bg relative flex min-h-screen items-center pt-24 text-white">
+      <div class="absolute inset-x-0 bottom-0 h-32 bg-gradient-to-t from-[#fffaf2] to-transparent"></div>
+      <div class="relative mx-auto w-full max-w-7xl px-4 py-24 sm:px-6 lg:px-8">
+        <div class="max-w-3xl reveal">
+          <p class="mb-5 text-sm font-semibold uppercase tracking-[0.34em] text-[#f0c46b]">LIFE COACH &amp; MENTOR FOR YOUNG PROFESSIONALS</p>
+          <h1 class="text-4xl font-black leading-[0.97] tracking-[-0.05em] sm:text-6xl lg:text-7xl">
+            You're Not Behind. You're Just Building Without a Blueprint.
+          </h1>
+          <p class="mt-6 max-w-2xl text-lg leading-8 text-white/84 sm:text-xl">
+            That doesn’t mean something is wrong with you. You're trying to grow a career, manage your money, protect your peace, and find your purpose — all at the same time. What got you through school isn't enough anymore. This stage of life needs a different kind of guidance.
+          </p>
+          <div class="mt-9 flex flex-col gap-3 sm:flex-row">
+            <a href="#challenge" class="shine inline-flex items-center justify-center rounded-full bg-[#f0c46b] px-7 py-4 text-base font-extrabold text-[#11121e] shadow-2xl shadow-[#f0c46b]/20 transition hover:-translate-y-0.5 hover:bg-[#ffd982]">
+              Find Your Direction &rarr;
+            </a>
+          </div>
+        </div>
+      </div>
+    </section>
 
-  <p class="subhead">You don't need another podcast episode. Another framework. Another person telling you to "just be positive." You need one space where you don't have to perform — and someone who won't try to fix you before they've listened.</p>
+    <!-- THE REALITY / PROBLEM SECTION -->
+    <section id="challenge" class="relative overflow-hidden px-4 py-20 sm:px-6 lg:px-8 lg:py-28">
+      <div class="mx-auto max-w-6xl">
+        <div class="reveal max-w-3xl">
+          <p class="text-sm font-bold uppercase tracking-[0.28em] text-[#9a6a14]">The Early-Career Reality</p>
+          <h2 class="mt-3 text-3xl font-black tracking-[-0.035em] text-[#121422] sm:text-5xl lg:text-6xl">
+            Life Changed. The Playbook Didn't.
+          </h2>
+          <p class="mt-6 text-xl font-medium leading-relaxed text-[#403d47] sm:text-2xl">
+            You didn't suddenly become less driven when you became a professional.
+          </p>
+          <p class="mt-3 text-lg leading-8 text-[#666270]">
+            The problem is that the habits that made you successful in school aren't enough anymore.
+          </p>
+        </div>
 
-  <span class="cta">Book a free discovery call</span>
-</div>
+        <!-- Before vs Now Comparison Card -->
+        <div class="reveal mt-12 grid gap-6 md:grid-cols-2">
+          <div class="relative overflow-hidden rounded-3xl border border-[#121422]/10 bg-white p-8 shadow-sm transition hover:shadow-md">
+            <div class="inline-flex items-center gap-2 rounded-full bg-[#121422]/5 px-4 py-1.5 text-xs font-bold uppercase tracking-wider text-[#666270]">
+              <span>Before</span> As a Student
+            </div>
+            <h3 class="mt-6 text-2xl font-bold tracking-tight text-[#121422]">
+              Your path was drawn for you.
+            </h3>
+            <p class="mt-3 text-base leading-7 text-[#666270]">
+              Term by term, exam by exam, certificate by certificate. The milestones were clear, and so was what counted as success.
+            </p>
+          </div>
 
-<!-- SECTION 2: THE IN-BETWEEN -->
-<div class="section">
-  <div class="section-num">Section 2 — The In-Between <span class="scoped-tag">SCOPED</span></div>
+          <div class="relative overflow-hidden rounded-3xl border-2 border-[#d8a64a] bg-gradient-to-br from-[#fbf4e8] to-[#f4ead9] p-8 shadow-sm transition hover:shadow-md">
+            <div class="inline-flex items-center gap-2 rounded-full bg-[#9a6a14]/15 px-4 py-1.5 text-xs font-bold uppercase tracking-wider text-[#9a6a14]">
+              <span>Now</span> As a Young Professional
+            </div>
+            <h3 class="mt-6 text-2xl font-black tracking-tight text-[#121422]">
+              Your life is the project now.
+            </h3>
+            <p class="mt-3 text-base leading-7 text-[#55515e]">
+              Career, money, relationships, health, and purpose all compete for the same 24 hours — and you're the one expected to lead it.
+            </p>
+          </div>
+        </div>
 
-  <p class="h2">For the version of you that doesn't quite have a name yet</p>
-  <p class="placeholder">[Body copy. Names the in-between feeling — not broken, not in crisis, you're simply stuck in the gap between who you were told to be and who you're actually becoming. ~80 words, in the prospect's voice, not the coach's.]</p>
-</div>
+        <!-- That Means Learning How To... Section -->
+        <div class="mt-16">
+          <div class="reveal flex items-center gap-3">
+            <span class="flex h-8 w-8 items-center justify-center rounded-full bg-[#9a6a14] text-sm font-bold text-white">&rarr;</span>
+            <h3 class="text-2xl font-black tracking-tight text-[#121422] sm:text-3xl">That means learning how to:</h3>
+          </div>
 
-<!-- SECTION 3: WHAT COACHING ACTUALLY IS HERE -->
-<div class="section">
-  <div class="section-num">Section 3 — What This Work Actually Is <span class="scoped-tag">SCOPED</span></div>
+          <div class="mt-8 grid gap-5 sm:grid-cols-2 lg:grid-cols-3">
+            <!-- Skill 1 -->
+            <div class="reveal group relative flex flex-col justify-between rounded-3xl border border-[#121422]/10 bg-white p-7 shadow-sm transition duration-300 hover:-translate-y-1 hover:border-[#d8a64a] hover:shadow-lg">
+              <div>
+                <div class="flex h-12 w-12 items-center justify-center rounded-2xl bg-[#f4ead9] text-xl font-bold text-[#9a6a14]">
+                  01
+                </div>
+                <h4 class="mt-5 text-xl font-black tracking-tight text-[#121422]">
+                  Manage your time without burning out.
+                </h4>
+                <p class="mt-3 text-base leading-7 text-[#666270]">
+                  Balance ambition with rest, so progress at work doesn't cost you your health or your life outside it.
+                </p>
+              </div>
+              <div class="mt-6 border-t border-[#121422]/5 pt-4 text-xs font-semibold text-[#9a6a14]">
+                Energy + Focus
+              </div>
+            </div>
 
-  <p class="h2">Not a course. Not a curriculum. A space to think.</p>
-  <p class="placeholder">[3 short principles. The point of view on what coaching is — and what it isn't. Should distinguish from therapy, from courses, from "just talking to a friend." This is where the strategic thinking shows up.]</p>
-</div>
+            <!-- Skill 2 -->
+            <div class="reveal group relative flex flex-col justify-between rounded-3xl border border-[#121422]/10 bg-white p-7 shadow-sm transition duration-300 hover:-translate-y-1 hover:border-[#d8a64a] hover:shadow-lg">
+              <div>
+                <div class="flex h-12 w-12 items-center justify-center rounded-2xl bg-[#e9f0ed] text-xl font-bold text-[#0d443c]">
+                  02
+                </div>
+                <h4 class="mt-5 text-xl font-black tracking-tight text-[#121422]">
+                  Make decisions without overthinking them.
+                </h4>
+                <p class="mt-3 text-base leading-7 text-[#666270]">
+                  Learn to choose a direction and commit, instead of staying stuck comparing options until nothing moves.
+                </p>
+              </div>
+              <div class="mt-6 border-t border-[#121422]/5 pt-4 text-xs font-semibold text-[#0d443c]">
+                Clarity Over Anxiety
+              </div>
+            </div>
 
-<!-- SECTION 4: WHAT IT COVERS -->
-<div class="section">
-  <div class="section-num">Section 4 — What We Work On <span class="scoped-tag">SCOPED</span></div>
+            <!-- Skill 3 -->
+            <div class="reveal group relative flex flex-col justify-between rounded-3xl border border-[#121422]/10 bg-white p-7 shadow-sm transition duration-300 hover:-translate-y-1 hover:border-[#d8a64a] hover:shadow-lg">
+              <div>
+                <div class="flex h-12 w-12 items-center justify-center rounded-2xl bg-[#f0e5ef] text-xl font-bold text-[#5a1734]">
+                  03
+                </div>
+                <h4 class="mt-5 text-xl font-black tracking-tight text-[#121422]">
+                  Build relationships that fuel your growth.
+                </h4>
+                <p class="mt-3 text-base leading-7 text-[#666270]">
+                  Cultivate mentors, peers, and networks that challenge you, open doors, and hold you to a higher standard.
+                </p>
+              </div>
+              <div class="mt-6 border-t border-[#121422]/5 pt-4 text-xs font-semibold text-[#5a1734]">
+                Circle + Standards
+              </div>
+            </div>
 
-  <p class="h2">The four things most people bring to our first call</p>
-  <p class="placeholder">[4 cards or short blocks: Career direction, Relationships & boundaries, Confidence & self-doubt, "I just need someone to talk to who gets it." Each one names the feeling, not the outcome. Should feel like the prospect nodding as they read.]</p>
-</div>
+            <!-- Skill 4 -->
+            <div class="reveal group relative flex flex-col justify-between rounded-3xl border border-[#121422]/10 bg-white p-7 shadow-sm transition duration-300 hover:-translate-y-1 hover:border-[#d8a64a] hover:shadow-lg">
+              <div>
+                <div class="flex h-12 w-12 items-center justify-center rounded-2xl bg-[#e8eef8] text-xl font-bold text-[#1d3d6b]">
+                  04
+                </div>
+                <h4 class="mt-5 text-xl font-black tracking-tight text-[#121422]">
+                  Handle pressure, failure, and self-doubt.
+                </h4>
+                <p class="mt-3 text-base leading-7 text-[#666270]">
+                  Turn setbacks, criticism, and slow seasons into feedback — instead of letting them become your identity.
+                </p>
+              </div>
+              <div class="mt-6 border-t border-[#121422]/5 pt-4 text-xs font-semibold text-[#1d3d6b]">
+                Resilience in Practice
+              </div>
+            </div>
 
-<!-- SECTION 5: THE TEMPERAMENT TOOL -->
-<div class="section">
-  <div class="section-num">Section 5 — The Temperament Assessment <span class="scoped-tag">SCOPED</span></div>
+            <!-- Skill 5 -->
+            <div class="reveal group relative flex flex-col justify-between rounded-3xl border border-[#121422]/10 bg-white p-7 shadow-sm transition duration-300 hover:-translate-y-1 hover:border-[#d8a64a] hover:shadow-lg sm:col-span-2 lg:col-span-2">
+              <div>
+                <div class="flex h-12 w-12 items-center justify-center rounded-2xl bg-[#fff2db] text-xl font-bold text-[#b45309]">
+                  05
+                </div>
+                <h4 class="mt-5 text-xl font-black tracking-tight text-[#121422]">
+                  Create direction when everything feels vague.
+                </h4>
+                <p class="mt-3 text-base leading-7 text-[#666270]">
+                  Turn "I should be doing more with my life" into defined goals, habits, and daily action you can measure.
+                </p>
+              </div>
+              <div class="mt-6 border-t border-[#121422]/5 pt-4 text-xs font-semibold text-[#b45309]">
+                Vision Into Action
+              </div>
+            </div>
+          </div>
+        </div>
 
-  <p class="h2">Not sure where to start? Take the temperament.</p>
-  <p class="placeholder">[Short block. Frames the temperament assessment as a low-commitment first step — 5 minutes, you'll learn how you're wired, no email required to get the result. This replaces the vague "Take a Temperament" button currently sitting without context.]</p>
+        <!-- Closing takeaway banner -->
+        <div class="reveal mt-14 rounded-3xl border border-[#121422]/10 bg-[#121422] p-8 text-center text-white sm:p-12">
+          <p class="text-sm font-bold uppercase tracking-[0.24em] text-[#f0c46b]">The Reframe</p>
+          <h3 class="mt-3 text-2xl font-black tracking-tight sm:text-4xl">
+            These aren't flaws in your character.
+          </h3>
+          <p class="mt-3 text-2xl font-black text-[#f0c46b] sm:text-4xl">
+            They're skills.
+          </p>
+          <p class="mx-auto mt-4 max-w-2xl text-lg leading-8 text-white/75 sm:text-xl">
+            And like any other skill, they can be coached, practiced, and strengthened — far faster with guidance than alone.
+          </p>
+        </div>
+      </div>
+    </section>
 
-  <span class="cta">Take the free 5-min temperament →</span>
-</div>
+    <!-- LOCKED TRUST CARDS -->
+    <section id="trust" class="px-4 py-20 sm:px-6 lg:px-8 lg:py-28">
+      <div class="mx-auto w-full max-w-7xl">
+        <div class="space-y-12 sm:space-y-16">
+          <!-- Card 1: Credibility -->
+          <div class="reveal">
+            <div class="mb-3 flex items-center gap-2">
+              <span class="inline-block h-1.5 w-6 rounded-full bg-[#f0c46b]"></span>
+              <p class="text-xs font-black uppercase tracking-[0.32em] text-[#d8a64a]">NEXT SECTION</p>
+            </div>
+            <article class="attention-flash relative w-full overflow-hidden rounded-[2.5rem] border border-amber-500/20 bg-gradient-to-br from-[#0f1422] via-[#0b0e18] to-[#080b14] p-8 text-white shadow-2xl shadow-black/40 sm:p-14 lg:p-16" style="animation-delay: 0.2s">
+              <div class="pointer-events-none absolute -right-16 -top-16 h-64 w-64 rounded-full bg-amber-500/5 blur-3xl"></div>
+              <div class="relative flex flex-col gap-6 lg:flex-row lg:items-center lg:justify-between">
+                <div class="lg:max-w-md">
+                  <div class="inline-flex items-center gap-2 rounded-full border border-amber-400/20 bg-amber-400/10 px-3.5 py-1 text-xs font-bold uppercase tracking-widest text-[#f0c46b]">
+                    <span>🔒</span> Locked Section
+                  </div>
+                  <h3 class="mt-4 text-3xl font-black tracking-[-0.035em] text-white sm:text-4xl lg:text-5xl">
+                    Credibility
+                  </h3>
+                </div>
+                <div class="border-t border-white/10 pt-6 lg:max-w-xl lg:border-l lg:border-t-0 lg:pl-10 lg:pt-0">
+                  <p class="text-sm font-semibold uppercase tracking-widest text-white/50">The moment your visitors feel:</p>
+                  <blockquote class="mt-3 text-xl font-medium leading-relaxed text-white sm:text-2xl lg:text-3xl">
+                    “They understand the challenge I'm facing, and they know how to help me through it.”
+                  </blockquote>
+                </div>
+              </div>
+            </article>
+          </div>
 
-<!-- SECTION 6: Coach STORY (reframed) -->
-<div class="section">
-  <div class="section-num">Section 6 — Coach's Story (reframed) <span class="scoped-tag">SCOPED</span></div>
+          <!-- Card 2: Transformation Promise -->
+          <div class="reveal">
+            <div class="mb-3 flex items-center gap-2">
+              <span class="inline-block h-1.5 w-6 rounded-full bg-[#f0c46b]"></span>
+              <p class="text-xs font-black uppercase tracking-[0.32em] text-[#d8a64a]">NEXT SECTION</p>
+            </div>
+            <article class="attention-flash relative w-full overflow-hidden rounded-[2.5rem] border border-emerald-500/20 bg-gradient-to-br from-[#0c191a] via-[#091213] to-[#060c0d] p-8 text-white shadow-2xl shadow-black/40 sm:p-14 lg:p-16" style="animation-delay: 0.6s">
+              <div class="pointer-events-none absolute -right-16 -top-16 h-64 w-64 rounded-full bg-emerald-500/5 blur-3xl"></div>
+              <div class="relative flex flex-col gap-6 lg:flex-row lg:items-center lg:justify-between">
+                <div class="lg:max-w-md">
+                  <div class="inline-flex items-center gap-2 rounded-full border border-emerald-400/20 bg-emerald-400/10 px-3.5 py-1 text-xs font-bold uppercase tracking-widest text-emerald-300">
+                    <span>🔒</span> Locked Section
+                  </div>
+                  <h3 class="mt-4 text-3xl font-black tracking-[-0.035em] text-white sm:text-4xl lg:text-5xl">
+                    Transformation Promise
+                  </h3>
+                </div>
+                <div class="border-t border-white/10 pt-6 lg:max-w-xl lg:border-l lg:border-t-0 lg:pl-10 lg:pt-0">
+                  <p class="text-sm font-semibold uppercase tracking-widest text-white/50">The moment your visitors feel:</p>
+                  <blockquote class="mt-3 text-xl font-medium leading-relaxed text-white sm:text-2xl lg:text-3xl">
+                    “I can see exactly who I could become.”
+                  </blockquote>
+                </div>
+              </div>
+            </article>
+          </div>
 
-  <p class="h2">A coach who remembers what it was like to not have it figured out</p>
-  <p class="placeholder">[Currently the site jumps to "your story" too early. This section is repositioned as proof-of-fit, not intro. Short paragraph about your background, framed around WHY you do this work — not just WHAT you've done. The "click here" button currently attached to this section should be removed or replaced with a contextual CTA.]</p>
-</div>
+          <!-- Card 3: Proof & Testimonials -->
+          <div class="reveal">
+            <div class="mb-3 flex items-center gap-2">
+              <span class="inline-block h-1.5 w-6 rounded-full bg-[#f0c46b]"></span>
+              <p class="text-xs font-black uppercase tracking-[0.32em] text-[#d8a64a]">NEXT SECTION</p>
+            </div>
+            <article class="attention-flash relative w-full overflow-hidden rounded-[2.5rem] border border-fuchsia-500/20 bg-gradient-to-br from-[#1a0f1d] via-[#120a14] to-[#09050a] p-8 text-white shadow-2xl shadow-black/40 sm:p-14 lg:p-16" style="animation-delay: 1.0s">
+              <div class="pointer-events-none absolute -right-16 -top-16 h-64 w-64 rounded-full bg-fuchsia-500/5 blur-3xl"></div>
+              <div class="relative flex flex-col gap-6 lg:flex-row lg:items-center lg:justify-between">
+                <div class="lg:max-w-md">
+                  <div class="inline-flex items-center gap-2 rounded-full border border-fuchsia-400/20 bg-fuchsia-400/10 px-3.5 py-1 text-xs font-bold uppercase tracking-widest text-fuchsia-300">
+                    <span>🔒</span> Locked Section
+                  </div>
+                  <h3 class="mt-4 text-3xl font-black tracking-[-0.035em] text-white sm:text-4xl lg:text-5xl">
+                    Proof &amp; Testimonials
+                  </h3>
+                </div>
+                <div class="border-t border-white/10 pt-6 lg:max-w-xl lg:border-l lg:border-t-0 lg:pl-10 lg:pt-0">
+                  <p class="text-sm font-semibold uppercase tracking-widest text-white/50">The moment your visitors feel:</p>
+                  <blockquote class="mt-3 text-xl font-medium leading-relaxed text-white sm:text-2xl lg:text-3xl">
+                    “People like me have done this before, and it actually worked.”
+                  </blockquote>
+                </div>
+              </div>
+            </article>
+          </div>
 
-<!-- SECTION 7: EVENTS / SEMINARS -->
-<div class="section">
-  <div class="section-num">Section 7 — Upcoming Events <span class="scoped-tag">SCOPED</span></div>
+          <!-- Card 4: Conversion -->
+          <div class="reveal">
+            <div class="mb-3 flex items-center gap-2">
+              <span class="inline-block h-1.5 w-6 rounded-full bg-[#f0c46b]"></span>
+              <p class="text-xs font-black uppercase tracking-[0.32em] text-[#d8a64a]">NEXT SECTION</p>
+            </div>
+            <article class="attention-flash relative w-full overflow-hidden rounded-[2.5rem] border border-blue-500/20 bg-gradient-to-br from-[#0c1322] via-[#080d17] to-[#05080f] p-8 text-white shadow-2xl shadow-black/40 sm:p-14 lg:p-16" style="animation-delay: 1.4s">
+              <div class="pointer-events-none absolute -right-16 -top-16 h-64 w-64 rounded-full bg-blue-500/5 blur-3xl"></div>
+              <div class="relative flex flex-col gap-6 lg:flex-row lg:items-center lg:justify-between">
+                <div class="lg:max-w-md">
+                  <div class="inline-flex items-center gap-2 rounded-full border border-blue-400/20 bg-blue-400/10 px-3.5 py-1 text-xs font-bold uppercase tracking-widest text-blue-300">
+                    <span>🔒</span> Locked Section
+                  </div>
+                  <h3 class="mt-4 text-3xl font-black tracking-[-0.035em] text-white sm:text-4xl lg:text-5xl">
+                    Conversion
+                  </h3>
+                </div>
+                <div class="border-t border-white/10 pt-6 lg:max-w-xl lg:border-l lg:border-t-0 lg:pl-10 lg:pt-0">
+                  <p class="text-sm font-semibold uppercase tracking-widest text-white/50">The moment your visitors feel:</p>
+                  <blockquote class="mt-3 text-xl font-medium leading-relaxed text-white sm:text-2xl lg:text-3xl">
+                    “I know what my next step is, and I'm ready to take it.”
+                  </blockquote>
+                </div>
+              </div>
+            </article>
+          </div>
+        </div>
+      </div>
+    </section>
 
-  <p class="h2">Come to a session before you commit to anything</p>
-  <p class="placeholder">[2–3 upcoming seminars with date, title, 1-line description, and a "Reserve a seat" link. Currently this section exists but with no clear context for why a prospect should care. Frame as low-stakes way to experience your work before booking 1:1.]</p>
-</div>
+    <!-- Concluding Section -->
+    <section id="next-step" class="relative overflow-hidden bg-[#080c19] px-4 py-24 text-white sm:px-6 lg:px-8 lg:py-32">
+      <div class="pointer-events-none absolute left-1/2 top-0 h-96 w-96 -translate-x-1/2 rounded-full bg-[#f0c46b]/10 blur-[120px]"></div>
+      <div class="relative mx-auto max-w-4xl text-center">
+        <div class="reveal">
+          <p class="text-xs font-black uppercase tracking-[0.32em] text-[#f0c46b]">Your Next Chapter</p>
+          <h2 class="mt-4 text-3xl font-black tracking-[-0.04em] text-white sm:text-5xl lg:text-6xl">
+            You Don't Have to Figure Out Your Life Alone.
+          </h2>
+          <p class="mt-8 text-xl leading-9 text-white/80 sm:text-2xl">
+            Your first years as a professional can become a cycle of comparison, second-guessing, and learning everything the hard way.
+          </p>
+          <p class="mt-6 text-xl leading-9 text-white/80 sm:text-2xl">
+            Or they can become the foundation for the person your future self is counting on.
+          </p>
+          <div class="mx-auto my-10 max-w-xl border-y border-white/10 py-6">
+            <p class="text-xl font-bold text-white sm:text-2xl">
+              You're already doing the work.
+            </p>
+            <p class="mt-2 text-2xl font-black text-[#f0c46b] sm:text-3xl">
+              Now it’s time to learn how to lead your life.
+            </p>
+          </div>
+          <div class="mt-10 flex flex-col items-center justify-center gap-4 sm:flex-row">
+            <a href="https://calendly.com/segunfalade/your-trust-gap-audit" target="_blank" rel="noopener noreferrer" class="shine inline-flex items-center justify-center rounded-full bg-[#f0c46b] px-9 py-4 text-base font-black text-[#11121e] shadow-2xl shadow-[#f0c46b]/20 transition hover:-translate-y-0.5 hover:bg-[#ffd982]">
+              Take the First Step &rarr;
+            </a>
+          </div>
+        </div>
+      </div>
+    </section>
+  </main>
 
-<!-- SECTION 8: INVITATION -->
-<div class="section">
-  <div class="section-num">Section 8 — The Invitation <span class="scoped-tag">SCOPED</span></div>
+  <footer id="footer" class="border-t border-white/10 bg-[#060913] px-4 py-12 text-white sm:px-6 lg:px-8">
+    <div class="mx-auto flex max-w-7xl flex-col items-center justify-between gap-6 md:flex-row">
+      <p class="text-sm text-white/60">
+        © 2026 Bestminds Consult. All rights reserved.
+      </p>
+      <div class="flex items-center gap-4" aria-label="Social media links">
+        <a href="#" class="grid h-10 w-10 place-items-center rounded-full border border-white/15 text-white/80 transition hover:border-[#f0c46b] hover:text-[#f0c46b]" aria-label="Facebook">
+          <svg viewBox="0 0 24 24" class="h-4 w-4" fill="currentColor" aria-hidden="true"><path d="M14 8.5V6.9c0-.8.3-1.2 1.3-1.2H17V2.4c-.9-.1-1.8-.2-2.7-.2-2.7 0-4.6 1.7-4.6 4.7v1.6H6.7V12h3v9.8H14V12h2.9l.5-3.5H14Z"/></svg>
+        </a>
+        <a href="#" class="grid h-10 w-10 place-items-center rounded-full border border-white/15 text-white/80 transition hover:border-[#f0c46b] hover:text-[#f0c46b]" aria-label="Instagram">
+          <svg viewBox="0 0 24 24" class="h-4 w-4" fill="none" stroke="currentColor" stroke-width="1.8" aria-hidden="true"><rect x="3" y="3" width="18" height="18" rx="5"/><circle cx="12" cy="12" r="4"/><path d="M17.5 6.5h.01" stroke-linecap="round"/></svg>
+        </a>
+        <a href="#" class="grid h-10 w-10 place-items-center rounded-full border border-white/15 text-white/80 transition hover:border-[#f0c46b] hover:text-[#f0c46b]" aria-label="YouTube">
+          <svg viewBox="0 0 24 24" class="h-4 w-4" fill="currentColor" aria-hidden="true"><path d="M21.6 7.2a3 3 0 0 0-2.1-2.1C17.6 4.6 12 4.6 12 4.6s-5.6 0-7.5.5a3 3 0 0 0-2.1 2.1C2 9.1 2 12 2 12s0 2.9.4 4.8a3 3 0 0 0 2.1 2.1c1.9.5 7.5.5 7.5.5s5.6 0 7.5-.5a3 3 0 0 0 2.1-2.1c.4-1.9.4-4.8.4-4.8s0-2.9-.4-4.8ZM10 15.4V8.6l5.8 3.4L10 15.4Z"/></svg>
+        </a>
+        <a href="#" class="grid h-10 w-10 place-items-center rounded-full border border-white/15 text-white/80 transition hover:border-[#f0c46b] hover:text-[#f0c46b]" aria-label="LinkedIn">
+          <svg viewBox="0 0 24 24" class="h-4 w-4" fill="currentColor" aria-hidden="true"><path d="M6.8 8.9H3.2v11.4h3.6V8.9ZM5 3.4a2.1 2.1 0 1 0 0 4.2 2.1 2.1 0 0 0 0-4.2Zm15.8 10.6c0-3.5-1.9-5.4-4.5-5.4-2 0-2.9 1.1-3.4 1.9V8.9H9.5v11.4h3.6v-5.6c0-1.5.3-2.9 2.1-2.9 1.7 0 1.8 1.6 1.8 3v5.5h3.6V14Z"/></svg>
+        </a>
+      </div>
+    </div>
+  </footer>
 
-  <p class="h2">If any of this feels like your reality, talk to me.</p>
-  <p class="placeholder">[2–3 sentences. Names who this is for AND who it isn't. "This is for people who are tired of pretending. It's not for people looking for a quick motivational boost or a generic framework." Final CTA.]</p>
+  <!-- End-of-page scroll-up overlay -->
+  <div id="journeyOverlay" class="trust-journey-overlay fixed inset-0 z-[70] flex items-center justify-center overflow-y-auto bg-[#fffdf8]/[0.98] px-4 py-12 text-[#121422] backdrop-blur-md sm:px-6 sm:py-16" role="dialog" aria-modal="true" aria-hidden="true" aria-labelledby="journeyTitle">
+    <button id="closeJourneyOverlay" class="fixed right-5 top-5 z-10 rounded-full border border-[#121422]/20 bg-white/80 px-4 py-2 text-sm font-bold text-[#121422]/70 shadow-sm transition hover:border-[#9a6a14] hover:text-[#9a6a14]" type="button" aria-label="Close message">Close</button>
+    <div class="mx-auto my-auto max-w-3xl py-6 text-center">
+      <p class="text-xs font-black uppercase tracking-[0.32em] text-[#9a6a14]">Strategic Potential</p>
+      <h2 id="journeyTitle" class="mt-3 text-3xl font-black leading-tight tracking-[-0.035em] text-[#121422] sm:text-5xl lg:text-6xl">
+        Imagine What This Could Become.
+      </h2>
 
-  <span class="cta">Book a free discovery call</span>
-</div>
+      <p class="mt-6 text-lg font-medium leading-relaxed text-[#403d47] sm:text-xl">
+        What you just experienced was built from limited information, basic resources, and a single round of work.
+      </p>
 
-<!-- FOOTER -->
-<div class="footer">
-  <div>BestMinds Consult</div>
-  <div>© 2026 — Privacy — Contact</div>
-</div>
+      <p class="mt-3 text-base font-bold text-[#9a6a14] sm:text-lg">
+        It was enough to show you the direction.
+      </p>
 
+      <div class="my-8 rounded-2xl border border-[#d8a64a]/30 bg-[#fbf4e8] p-6 text-left shadow-sm sm:p-8">
+        <p class="text-base font-bold text-[#121422] sm:text-lg">
+          Now imagine what happens when the work is built around <span class="text-[#9a6a14]">Bestminds Consult</span>:
+        </p>
+        <ul class="mt-4 space-y-2.5 text-base leading-7 text-[#55515e] sm:text-lg">
+          <li class="flex items-start gap-2.5">
+            <span class="font-bold text-[#9a6a14]">•</span>
+            <span>Your customers.</span>
+          </li>
+          <li class="flex items-start gap-2.5">
+            <span class="font-bold text-[#9a6a14]">•</span>
+            <span>Your story.</span>
+          </li>
+          <li class="flex items-start gap-2.5">
+            <span class="font-bold text-[#9a6a14]">•</span>
+            <span>Your expertise.</span>
+          </li>
+          <li class="flex items-start gap-2.5">
+            <span class="font-bold text-[#9a6a14]">•</span>
+            <span>Their doubts, desires, and decision-making journey.</span>
+          </li>
+          <li class="flex items-start gap-2.5">
+            <span class="font-bold text-[#9a6a14]">•</span>
+            <span>And the transformation you're actually helping them achieve.</span>
+          </li>
+        </ul>
+      </div>
+
+      <div class="space-y-2 text-base font-semibold leading-relaxed text-[#121422] sm:text-lg">
+        <p>Every section becomes intentional.</p>
+        <p>Every message has a job.</p>
+        <p>Every step moves the right visitor closer to saying yes.</p>
+      </div>
+
+      <p class="mt-6 text-base italic leading-relaxed text-[#666270] sm:text-lg">
+        This was the concept. The finished experience is where it gets interesting.
+      </p>
+
+      <div class="mt-8 border-t border-[#121422]/10 pt-6">
+        <p class="text-base font-medium text-[#403d47] sm:text-lg">
+          If you'd like to see what we can build for Bestminds, send me an email/DM.
+        </p>
+
+        <p class="my-4 text-xs font-black uppercase tracking-[0.24em] text-[#9a6a14]">
+          OR
+        </p>
+
+        <a href="https://calendly.com/segunfalade/your-trust-gap-audit" target="_blank" rel="noopener noreferrer" class="shine inline-flex items-center justify-center rounded-full bg-[#11121e] px-8 py-4 text-base font-black text-white shadow-xl shadow-[#11121e]/20 transition hover:-translate-y-0.5 hover:bg-[#2a2b3d]">
+          Simply book a 15-min voice call here &rarr;
+        </a>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    const menuButton = document.getElementById('menuButton');
+    const mobileMenu = document.getElementById('mobileMenu');
+
+    menuButton.addEventListener('click', () => {
+      const isOpen = !mobileMenu.classList.contains('hidden');
+      mobileMenu.classList.toggle('hidden');
+      menuButton.setAttribute('aria-expanded', String(!isOpen));
+      menuButton.textContent = isOpen ? 'Menu' : 'Close';
+    });
+
+    mobileMenu.querySelectorAll('a').forEach((link) => {
+      link.addEventListener('click', () => {
+        mobileMenu.classList.add('hidden');
+        menuButton.setAttribute('aria-expanded', 'false');
+        menuButton.textContent = 'Menu';
+      });
+    });
+
+    const observer = new IntersectionObserver((entries) => {
+      entries.forEach((entry) => {
+        if (entry.isIntersecting) entry.target.classList.add('show');
+      });
+    }, { threshold: 0.15 });
+
+    document.querySelectorAll('.reveal').forEach((element) => observer.observe(element));
+
+    const journeyOverlay = document.getElementById('journeyOverlay');
+    const closeJourneyOverlay = document.getElementById('closeJourneyOverlay');
+    let lastScrollY = window.scrollY;
+    let journeyOverlayShown = false;
+
+    const showJourneyOverlay = () => {
+      journeyOverlay.classList.add('is-visible');
+      journeyOverlay.setAttribute('aria-hidden', 'false');
+      document.body.classList.add('overflow-hidden');
+      closeJourneyOverlay.focus();
+    };
+
+    const hideJourneyOverlay = () => {
+      journeyOverlay.classList.remove('is-visible');
+      journeyOverlay.setAttribute('aria-hidden', 'true');
+      document.body.classList.remove('overflow-hidden');
+      journeyOverlayShown = false;
+      window._hasReachedPageEnd = false;
+    };
+
+    window.addEventListener('scroll', () => {
+      const currentScrollY = window.scrollY;
+      const scrollHeight = document.documentElement.scrollHeight;
+      const clientHeight = document.documentElement.clientHeight;
+      const reachedEnd = (currentScrollY + clientHeight) >= (scrollHeight - 120);
+
+      // Track that user reached the bottom of the page
+      if (reachedEnd) {
+        window._hasReachedPageEnd = true;
+      }
+
+      const scrollingUp = currentScrollY < (lastScrollY - 6);
+
+      if (window._hasReachedPageEnd && scrollingUp && !journeyOverlayShown) {
+        journeyOverlayShown = true;
+        showJourneyOverlay();
+      }
+
+      lastScrollY = currentScrollY;
+    }, { passive: true });
+
+    closeJourneyOverlay.addEventListener('click', hideJourneyOverlay);
+    journeyOverlay.addEventListener('click', (event) => {
+      if (event.target === journeyOverlay) hideJourneyOverlay();
+    });
+    document.addEventListener('keydown', (event) => {
+      if (event.key === 'Escape' && journeyOverlay.classList.contains('is-visible')) hideJourneyOverlay();
+    });
+  </script>
 </body>
 </html>
